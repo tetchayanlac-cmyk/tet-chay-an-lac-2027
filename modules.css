@@ -105,3 +105,54 @@
   .ud-contact { grid-template-columns: 1fr; gap: 0; }
   .ud-contact dd { margin-bottom: 8px; }
 }
+
+/* Hội chợ online 3D (mục Không gian) */
+.fair3d {
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: center;
+  background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 56px;
+}
+.fair3d-visual { position: relative; display: block; border-radius: 14px; overflow: hidden; background: #e6edcc; aspect-ratio: 544 / 276; }
+.fair3d-visual img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.fair3d-visual:hover img, .fair3d-visual:focus-visible img { transform: scale(1.04); }
+.fair3d-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(38, 50, 8, .45)); }
+.fair3d-play {
+  position: absolute; left: 50%; top: 50%; z-index: 1; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--primary); box-shadow: 0 0 0 10px rgba(107, 138, 6, .28), 0 14px 30px -10px rgba(0,0,0,.5);
+  transition: transform .2s;
+}
+.fair3d-visual:hover .fair3d-play { transform: scale(1.08); }
+.fair3d-play svg { width: 34px; height: 34px; fill: #fff; margin-left: 4px; }
+.fair3d-badge {
+  position: absolute; left: 14px; bottom: 14px; z-index: 1; background: rgba(255,255,255,.94); color: var(--primary-dark);
+  font-weight: 700; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px;
+}
+.fair3d-info h3 { font-size: 1.6rem; margin-bottom: 14px; }
+.fair3d-stats { list-style: none; padding: 0; margin: 0 0 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.fair3d-stats li { background: #f3f5e6; border-radius: 10px; padding: 10px 6px; text-align: center; }
+.fair3d-stats b { display: block; font-family: var(--serif); font-size: 1.5rem; line-height: 1.1; color: var(--primary-dark); }
+.fair3d-stats span { font-size: .75rem; color: var(--muted); }
+.fair3d-features { margin: 0 0 20px; padding-left: 20px; color: var(--muted); font-size: .95rem; }
+.fair3d-features li { margin-bottom: 4px; }
+.fair3d-note { margin: 10px 0 0; font-size: .82rem; color: var(--muted); }
+.zones-title small { font-family: var(--sans); font-size: .9rem; font-weight: 400; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .fair3d { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 640px) {
+  .fair3d { padding: 12px; margin-bottom: 40px; }
+  .fair3d-play { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
+  .fair3d-stats { grid-template-columns: repeat(2, 1fr); }
+  .fair3d-stats b { font-size: 1.25rem; }
+  .fair3d-info .btn { display: block; text-align: center; }
+}
+
+/* Thanh menu nhiều mục: giữ mỗi mục trên một dòng ở màn hình máy tính */
+@media (min-width: 901px) {
+  .main-nav a { white-space: nowrap; }
+}
+@media (min-width: 901px) and (max-width: 1240px) {
+  .main-nav { gap: 0; }
+  .main-nav a:not(.btn) { padding: 8px 6px; font-size: .84rem; }
+  .brand-text { font-size: 1rem; }
+}
