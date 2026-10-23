@@ -40,7 +40,10 @@
     var lh = c.lienHe || {}, items = [];
     if (lh.hotline) items.push('<li><b>Hotline:</b> <a href="' + esc(telHref(lh.hotline)) + '">' + esc(lh.hotline) + '</a></li>');
     if (lh.email) items.push('<li><b>Email:</b> <a href="mailto:' + esc(lh.email) + '">' + esc(lh.email) + '</a></li>');
-    if (safeUrl(lh.fanpage)) items.push('<li><b>Fanpage:</b> <a href="' + esc(safeUrl(lh.fanpage)) + '" target="_blank" rel="noopener">' + esc(lh.fanpage.replace(/^https?:\/\/(www\.)?/, '')) + '</a></li>');
+    if (safeUrl(lh.fanpage)) {
+      var pageLabel = /facebook\.com/i.test(lh.fanpage) ? 'Tết Chay An Lạc trên Facebook' : lh.fanpage.replace(/^https?:\/\/(www\.)?/, '');
+      items.push('<li><b>Fanpage:</b> <a href="' + esc(safeUrl(lh.fanpage)) + '" target="_blank" rel="noopener">' + esc(pageLabel) + '</a></li>');
+    }
     if (lh.zalo) {
       var z = /^https?:/i.test(lh.zalo) ? lh.zalo : 'https://zalo.me/' + String(lh.zalo).replace(/[^0-9]/g, '');
       items.push('<li><b>Zalo:</b> <a href="' + esc(z) + '" target="_blank" rel="noopener">' + esc(lh.zalo) + '</a></li>');
