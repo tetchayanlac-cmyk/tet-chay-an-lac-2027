@@ -182,3 +182,26 @@
   .booth-actions { width: 100%; }
   .booth-actions .btn { flex: 1; text-align: center; }
 }
+
+/* Đơn vị tổ chức (mục Giới thiệu) */
+.organizer-card {
+  display: inline-block; max-width: 760px; width: 100%; background: #fff; border: 1px dashed var(--accent-dark);
+  border-radius: var(--radius); padding: 22px 26px; text-align: center;
+}
+.organizer .organizer-card p { display: block; border: 0; padding: 0; background: none; border-radius: 0; }
+.organizer-label { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--primary); font-weight: 600; }
+.organizer-name { font-family: var(--serif); font-size: clamp(1.2rem, 2.6vw, 1.5rem); font-weight: 700; margin: 6px 0 4px; color: var(--ink); }
+.organizer-partners { color: var(--muted); font-size: .92rem; margin: 0 0 16px; }
+.organizer-contact { list-style: none; margin: 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; }
+.organizer-contact li { display: flex; flex-direction: column; align-items: center; }
+.organizer-contact span { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.organizer-contact a { font-weight: 600; color: var(--primary-dark); text-decoration: none; word-break: break-word; }
+.organizer-contact a:hover { text-decoration: underline; }
+.footer-contact { font-size: .9rem; margin-top: 6px; }
+.footer-contact a { color: #ffcf94; text-decoration: none; }
+.footer-contact a:hover { text-decoration: underline; }
+.section-warm .contact a { color: #fff; }
+@media (max-width: 640px) {
+  .organizer-card { padding: 18px 16px; }
+  .organizer-contact { flex-direction: column; gap: 10px; }
+}
