@@ -68,6 +68,7 @@ button, .file-btn {
 button:hover, .file-btn:hover { border-color: var(--accent); }
 button:focus-visible, .file-btn:focus-within, input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
 button:disabled { opacity: .45; cursor: not-allowed; }
+#save.waiting { opacity: .7; }
 .primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
 .big { width: 100%; padding: 12px 16px; font-size: 15px; }
 .file-btn input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
@@ -79,7 +80,10 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
 .modal { position: fixed; inset: 0; background: rgba(10, 12, 4, .72); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); z-index: 10; }
 .modal[hidden] { display: none; }
 .modal .box { background: var(--surface); color: var(--fg); border-radius: 8px; padding: 16px; max-width: 520px; width: 100%; display: grid; gap: 12px; }
-.modal img { width: 100%; border-radius: 4px; }
+.modal img { width: 100%; max-height: 62vh; object-fit: contain; border-radius: 4px; }
+.modal .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.modal .row > * { flex: 1 1 140px; text-align: center; text-decoration: none; }
+.status a { color: var(--accent); font-weight: 600; }
 .modal p { margin: 0; font-size: 14px; }
 @media (prefers-reduced-motion: no-preference) { button { transition: border-color .15s, background .15s; } }
 </style>
@@ -151,7 +155,10 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
   <div class="box">
     <p id="modalText">Nhấn giữ ảnh (điện thoại) hoặc chuột phải → “Lưu hình ảnh” (máy tính) để lưu.</p>
     <img id="modalImg" alt="Ảnh đã ghép khung">
-    <button type="button" id="modalClose">Đóng</button>
+    <div class="row">
+      <a id="modalDl" class="file-btn primary" href="#" download>Tải ảnh về</a>
+      <button type="button" id="modalClose">Đóng</button>
+    </div>
   </div>
 </div>
 
@@ -286,7 +293,7 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
     $("bri").value = st.bri; $("briVal").textContent = st.bri + "%";
     $("con").value = st.con; $("conVal").textContent = st.con + "%";
     $("sat").value = st.sat; $("satVal").textContent = st.sat + "%";
-    $("save").disabled = !st.img;
+    $("save").classList.toggle("waiting", !st.img); // vẫn bấm được: chưa có ảnh thì hiện hướng dẫn chọn ảnh
   }
 
   function resetEdit() {
@@ -378,27 +385,77 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
           if (err && err.code === "rate_limited") { setStatus("Đang có một hộp thoại lưu mở. Hãy thử lại sau giây lát."); return; }
         }
       }
-      showModal(blob); return;
+      showModal(blob, filename); return;
     }
+    // Trình duyệt trong ứng dụng (Zalo, Facebook, Messenger…) và iPhone/iPad thường bỏ qua tải file:
+    // mở hộp xem ảnh để nhấn giữ lưu, hoặc dùng bảng Chia sẻ → Lưu ảnh nếu thiết bị hỗ trợ.
+    const ua = navigator.userAgent || "";
+    const inApp = /Zalo|FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|MicroMessenger|TikTok/i.test(ua);
+    const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (inApp || iOS) {
+      const file = new File([blob], filename, { type: blob.type });
+      if (iOS && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file] }); setStatus("Chọn “Lưu hình ảnh” để lưu vào máy."); return; }
+        catch (err) { if (err && err.name === "AbortError") { setStatus("Bạn đã huỷ lưu ảnh."); return; } }
+      }
+      showModal(blob, filename, inApp); return;
+    }
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = filename;
+    a.href = url; a.download = filename;
     document.body.appendChild(a); a.click(); a.remove();
-    setStatus("Đã tải " + filename + ".");
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    $("status").innerHTML = "Đã tải <b></b> vào thư mục Tải xuống. <a href=\"#\" id=\"notSaved\">Không thấy ảnh? Bấm vào đây</a>";
+    $("status").querySelector("b").textContent = filename;
+    $("notSaved").onclick = e => { e.preventDefault(); showModal(blob, filename); };
   }
-  function showModal(blob) {
-    $("modalImg").src = URL.createObjectURL(blob);
+  function showModal(blob, filename, inApp) {
+    const url = URL.createObjectURL(blob);
+    $("modalImg").src = url;
+    $("modalDl").href = url; $("modalDl").download = filename || "tet-chay-an-lac-2027.jpg";
+    $("modalText").textContent = inApp
+      ? "Ứng dụng này (Zalo/Facebook…) không cho tải file trực tiếp. Hãy nhấn giữ vào ảnh → “Lưu ảnh”, hoặc mở trang này bằng Chrome/Safari (menu ⋯ → Mở bằng trình duyệt)."
+      : "Nhấn giữ ảnh (điện thoại) hoặc chuột phải → “Lưu hình ảnh thành…” (máy tính) để lưu.";
     $("modal").hidden = false;
   }
   $("modalClose").onclick = () => { $("modal").hidden = true; };
 
+  // Một số trình duyệt/máy yếu trả về null khi tạo ảnh lớn: dùng toDataURL thay thế.
+  function canvasToBlob(canvas, type, quality) {
+    return new Promise(resolve => {
+      const viaDataUrl = () => {
+        try {
+          const data = canvas.toDataURL(type, quality), bin = atob(data.split(",")[1]);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          resolve(new Blob([bytes], { type }));
+        } catch (e) { resolve(null); }
+      };
+      if (!canvas.toBlob) return viaDataUrl();
+      canvas.toBlob(b => b ? resolve(b) : viaDataUrl(), type, quality);
+    });
+  }
+  async function saveCanvas(canvas, type, quality, filename) {
+    setStatus("Đang tạo ảnh…");
+    const blob = await canvasToBlob(canvas, type, quality);
+    if (!blob) { setStatus("Trình duyệt này không tạo được ảnh. Hãy thử Chrome, Edge hoặc Safari bản mới."); return; }
+    try { await offer(blob, filename); }
+    catch (e) { showModal(blob, filename); }
+  }
+
   $("save").onclick = () => {
-    if (!st.img) return;
+    if (!st.img) {
+      setStatus("Bạn chưa chọn ảnh. Hãy bấm “Chọn ảnh của bạn” hoặc bấm vào khung để chọn ảnh chân dung trước, rồi mới tải ảnh về.");
+      stage.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
     const out = document.createElement("canvas"); out.width = out.height = W;
     const c = out.getContext("2d");
+    c.fillStyle = "#fff"; c.fillRect(0, 0, W, W); // JPG không có nền trong suốt
     drawPhoto(c); c.drawImage(frame, 0, 0);
-    out.toBlob(b => offer(b, "tet-chay-an-lac-2027.jpg"), "image/jpeg", 0.92);
+    saveCanvas(out, "image/jpeg", 0.92, "tet-chay-an-lac-2027.jpg");
   };
-  $("saveFrame").onclick = () => frame.toBlob(b => offer(b, "khung-tet-chay-an-lac-2027.png"), "image/png");
+  $("saveFrame").onclick = () => saveCanvas(frame, "image/png", undefined, "khung-tet-chay-an-lac-2027.png");
 
   buildFrame(); syncUI(); render();
   const fontReady = document.fonts ? document.fonts.load(`600 150px Oswald`, TEXT) : Promise.resolve();
