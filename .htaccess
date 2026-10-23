@@ -1,0 +1,18 @@
+Options -Indexes
+
+# Không cho tải trực tiếp file cấu hình và file tạm
+<FilesMatch "^(api-config\.php|.*\.tmp[0-9a-f]*)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Dữ liệu JSON luôn lấy bản mới nhất
+<IfModule mod_headers.c>
+  <FilesMatch "\.json$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

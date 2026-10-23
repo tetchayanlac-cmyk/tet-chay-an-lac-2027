@@ -1,0 +1,15 @@
+# Mật khẩu quản trị – tạo trực tiếp trên hosting từ api-config.example.php
+api-config.php
+
+# Dữ liệu riêng tư: đăng ký của khách, sao lưu, giới hạn gửi form
+data/private/*
+!data/private/.htaccess
+
+# File tạm khi ghi dữ liệu
+*.tmp*
+
+# File hệ thống
+Thumbs.db
+desktop.ini
+.DS_Store
+~$*

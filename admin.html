@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Quản trị – Tết Chay An Lạc 2027</title>
+  <link rel="icon" type="image/webp" href="logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ĐĂNG NHẬP -->
+<section class="login" id="login">
+  <form class="login-box" id="login-form">
+    <img src="logo.webp" alt="" width="96" height="96">
+    <h1>Quản trị website</h1>
+    <p>Tết Chay An Lạc 2027</p>
+    <label>Mật khẩu<input type="password" id="login-pw" autocomplete="current-password" required></label>
+    <button class="btn btn-primary btn-block" type="submit">Đăng nhập</button>
+    <p class="login-msg" id="login-msg" role="alert"></p>
+  </form>
+</section>
+
+<!-- ỨNG DỤNG -->
+<div class="app" id="app" hidden>
+  <aside class="side">
+    <div class="side-brand"><img src="logo.webp" alt="" width="40" height="40"><span>Quản trị<br><b>Tết Chay An Lạc 2027</b></span></div>
+    <nav class="side-nav" id="side-nav">
+      <button data-view="tong-quan" class="active">Tổng quan</button>
+      <button data-view="dang-ky">Đăng ký <span class="badge" id="badge-new" hidden></span></button>
+      <button data-view="don-vi">Đơn vị tham gia</button>
+      <button data-view="tin-tuc">Tin tức &amp; thông báo</button>
+      <button data-view="noi-dung">Nội dung website</button>
+    </nav>
+    <div class="side-foot">
+      <a href="index.html" target="_blank" rel="noopener">Xem website ↗</a>
+      <button id="logout" class="link">Đăng xuất</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- TỔNG QUAN -->
+    <section class="view" id="view-tong-quan">
+      <header class="view-head"><h2>Tổng quan</h2></header>
+      <div class="kpis" id="kpis"></div>
+      <div class="panel">
+        <h3>Đăng ký theo nhu cầu</h3>
+        <div id="kpi-interest" class="interest-bars"></div>
+      </div>
+      <div class="panel">
+        <h3>Đăng ký mới nhất</h3>
+        <div id="latest-regs"></div>
+      </div>
+    </section>
+
+    <!-- ĐĂNG KÝ -->
+    <section class="view" id="view-dang-ky" hidden>
+      <header class="view-head">
+        <h2>Danh sách đăng ký</h2>
+        <div class="actions">
+          <button class="btn" id="regs-reload">Tải lại</button>
+          <button class="btn btn-primary" id="regs-export">Xuất Excel</button>
+        </div>
+      </header>
+      <div class="filters">
+        <input type="search" id="regs-q" placeholder="Tìm tên, số điện thoại, email…">
+        <select id="regs-interest"><option value="">Tất cả nhu cầu</option></select>
+        <select id="regs-status"><option value="">Mọi trạng thái</option></select>
+      </div>
+      <p class="count" id="regs-count"></p>
+      <div class="table-wrap"><table class="table" id="regs-table">
+        <thead><tr><th>Thời gian</th><th>Họ tên</th><th>Liên hệ</th><th>Nhu cầu</th><th>Lời nhắn</th><th>Trạng thái</th><th>Ghi chú nội bộ</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </section>
+
+    <!-- ĐƠN VỊ THAM GIA -->
+    <section class="view" id="view-don-vi" hidden>
+      <header class="view-head">
+        <h2>Đơn vị tham gia</h2>
+        <div class="actions">
+          <button class="btn" id="units-template">Tải file Excel mẫu</button>
+          <label class="btn">Nhập từ Excel/CSV<input type="file" id="units-import" accept=".xlsx,.xls,.csv" hidden></label>
+          <label class="btn">Tải logo hàng loạt<input type="file" id="units-logos" accept="image/*" multiple hidden></label>
+          <button class="btn" id="units-add">+ Thêm đơn vị</button>
+          <button class="btn" id="units-export">Xuất Excel</button>
+          <button class="btn btn-primary" id="units-save" data-save="units">Lưu &amp; xuất bản</button>
+        </div>
+      </header>
+      <details class="help">
+        <summary>Hướng dẫn nhập hàng loạt</summary>
+        <ol>
+          <li>Bấm <b>Tải file Excel mẫu</b>, điền mỗi đơn vị một dòng. Sản phẩm tiêu biểu cách nhau bằng dấu <code>;</code></li>
+          <li>Cột <b>Tên file logo</b> ghi đúng tên file ảnh (ví dụ <code>hop-tac-xa-an-lac.png</code>). Để trống thì hệ thống tự ghép theo tên đơn vị.</li>
+          <li>Bấm <b>Nhập từ Excel/CSV</b>. Đơn vị trùng tên sẽ được cập nhật, đơn vị mới được thêm vào.</li>
+          <li>Bấm <b>Tải logo hàng loạt</b>, chọn tất cả file logo cùng lúc (Ctrl+A trong thư mục). Logo được tự động thu nhỏ.</li>
+          <li>Kiểm tra lại rồi bấm <b>Lưu &amp; xuất bản</b>. Website cập nhật ngay.</li>
+        </ol>
+      </details>
+      <div class="import-report" id="units-report" hidden></div>
+      <div class="filters">
+        <input type="search" id="units-q" placeholder="Tìm tên, ngành nghề, sản phẩm…">
+        <select id="units-industry"><option value="">Mọi ngành nghề</option></select>
+        <label class="chk"><input type="checkbox" id="units-nologo"> Chỉ đơn vị chưa có logo</label>
+      </div>
+      <p class="count" id="units-count"></p>
+      <div class="table-wrap"><table class="table" id="units-table">
+        <thead><tr><th>Logo</th><th>Tên đơn vị</th><th>Ngành nghề</th><th>Sản phẩm tiêu biểu</th><th>Liên hệ</th><th>Gian hàng</th><th>Hiện</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </section>
+
+    <!-- TIN TỨC -->
+    <section class="view" id="view-tin-tuc" hidden>
+      <header class="view-head">
+        <h2>Tin tức &amp; thông báo</h2>
+        <div class="actions">
+          <button class="btn" id="news-add">+ Viết tin mới</button>
+          <button class="btn btn-primary" data-save="news" id="news-save">Lưu &amp; xuất bản</button>
+        </div>
+      </header>
+      <p class="hint">Thông báo khẩn (dải chữ trên đầu website) nằm trong mục <b>Nội dung website → Thông báo</b>.</p>
+      <div id="news-list" class="news-list"></div>
+    </section>
+
+    <!-- NỘI DUNG -->
+    <section class="view" id="view-noi-dung" hidden>
+      <header class="view-head">
+        <h2>Nội dung website</h2>
+        <div class="actions"><button class="btn btn-primary" data-save="content" id="content-save">Lưu &amp; xuất bản</button></div>
+      </header>
+      <div id="content-form" class="content-form"></div>
+    </section>
+  </main>
+</div>
+
+<!-- HỘP SỬA ĐƠN VỊ -->
+<dialog class="dlg" id="unit-dlg">
+  <form method="dialog" id="unit-form">
+    <header><h3 id="unit-dlg-title">Đơn vị</h3><button value="cancel" formnovalidate class="x" aria-label="Đóng">×</button></header>
+    <div class="dlg-body grid2">
+      <div class="logo-edit">
+        <div class="logo-box" id="unit-logo-preview"></div>
+        <label class="btn btn-sm">Chọn logo<input type="file" id="unit-logo-input" accept="image/*" hidden></label>
+        <button type="button" class="link" id="unit-logo-remove">Xóa logo</button>
+      </div>
+      <div class="fields">
+        <label class="span2">Tên đơn vị *<input name="ten" required maxlength="160"></label>
+        <label>Ngành nghề<input name="nganh" list="industry-list" maxlength="80"></label>
+        <label>Gian hàng / Khu<input name="khu" maxlength="40" placeholder="VD: B12 hoặc Khu D"></label>
+        <label class="span2">Sản phẩm tiêu biểu <small>(mỗi dòng một sản phẩm)</small><textarea name="sanPham" rows="3"></textarea></label>
+        <label class="span2">Giới thiệu ngắn<textarea name="moTa" rows="3" maxlength="1000"></textarea></label>
+        <label>Người liên hệ<input name="nguoiLienHe" maxlength="80"></label>
+        <label>Điện thoại<input name="dienThoai" maxlength="30"></label>
+        <label>Email<input name="email" type="email" maxlength="120"></label>
+        <label>Website / Fanpage<input name="website" maxlength="300" placeholder="https://"></label>
+        <label class="span2">Địa chỉ<input name="diaChi" maxlength="200"></label>
+        <label class="chk span2"><input type="checkbox" name="an"> Tạm ẩn trên website</label>
+      </div>
+    </div>
+    <footer><button value="cancel" formnovalidate class="btn">Hủy</button><button value="ok" class="btn btn-primary" id="unit-ok">Xong</button></footer>
+  </form>
+</dialog>
+<datalist id="industry-list"></datalist>
+
+<!-- HỘP SỬA TIN -->
+<dialog class="dlg" id="news-dlg">
+  <form method="dialog" id="news-form">
+    <header><h3>Bài viết</h3><button value="cancel" formnovalidate class="x" aria-label="Đóng">×</button></header>
+    <div class="dlg-body">
+      <div class="fields">
+        <label class="span2">Tiêu đề *<input name="tieuDe" required maxlength="200"></label>
+        <label>Ngày đăng<input name="ngay" type="date"></label>
+        <label class="chk"><input type="checkbox" name="ghim"> Ghim lên đầu</label>
+        <label class="span2">Tóm tắt<textarea name="tomTat" rows="2" maxlength="400"></textarea></label>
+        <label class="span2">Nội dung <small>(để trống một dòng giữa các đoạn)</small><textarea name="noiDung" rows="10"></textarea></label>
+        <div class="span2 news-img">
+          <div class="img-box" id="news-img-preview"></div>
+          <label class="btn btn-sm">Chọn ảnh minh họa<input type="file" id="news-img-input" accept="image/*" hidden></label>
+          <button type="button" class="link" id="news-img-remove">Xóa ảnh</button>
+        </div>
+        <label class="chk span2"><input type="checkbox" name="an"> Tạm ẩn trên website</label>
+      </div>
+    </div>
+    <footer><button value="cancel" formnovalidate class="btn">Hủy</button><button value="ok" class="btn btn-primary">Xong</button></footer>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
