@@ -13,3 +13,6 @@ Thumbs.db
 desktop.ini
 .DS_Store
 ~$*
+
+# Cấu hình database của Bản đồ Chay (mật khẩu MySQL) – tạo trực tiếp trên hosting
+ban-do-app/config.php

@@ -2,7 +2,7 @@
   'use strict';
 
   var INTERESTS = {
-    'gian-hang': 'Đăng ký gian hàng', 'vegan-run': 'Vegan Run 2027', 'nau-an': 'Cuộc thi nấu ăn VVCC',
+    'gian-hang': 'Đăng ký gian hàng', 'vegan-run': 'Vegan Run', 'nau-an': 'Cuộc thi Bếp Chay An Lạc',
     'tinh-nguyen': 'Tình nguyện viên', 'tai-tro': 'Tài trợ / Đồng hành', 'khac': 'Khác'
   };
   var STATUSES = { 'moi': 'Mới', 'da-lien-he': 'Đã liên hệ', 'hoan-tat': 'Hoàn tất', 'huy': 'Hủy' };
@@ -238,7 +238,7 @@
     var rows = [['Thời gian', 'Họ tên', 'Điện thoại', 'Email', 'Nhu cầu', 'Lời nhắn', 'Trạng thái', 'Ghi chú']].concat(filteredRegs().map(function (r) {
       return [fmtTime(r.thoiGian), r.hoTen, r.dienThoai, r.email, INTERESTS[r.quanTam] || r.quanTam, r.loiNhan, STATUSES[r.trangThai] || r.trangThai, r.ghiChu];
     }));
-    writeXlsx(rows, 'Đăng ký', 'dang-ky-tet-chay-an-lac-2027.xlsx', [18, 24, 14, 26, 22, 40, 12, 30]);
+    writeXlsx(rows, 'Đăng ký', 'dang-ky-tet-chay-an-lac-hoa-binh-xanh.xlsx', [18, 24, 14, 26, 22, 40, 12, 30]);
   });
 
   // ---------- Tổng quan ----------
@@ -413,7 +413,7 @@
   $('#units-export').addEventListener('click', function () {
     writeXlsx([UNIT_COLUMNS.map(function (c) { return c[1]; })].concat(S.units.map(function (u) {
       return UNIT_COLUMNS.map(function (c) { return c[0] === 'sanPham' ? (u.sanPham || []).join('; ') : c[0] === 'logoFile' ? fileNameOf(u.logo) : (u[c[0]] || ''); });
-    })), 'Đơn vị tham gia', 'don-vi-tham-gia-2027.xlsx', [34, 20, 36, 36, 18, 14, 24, 26, 22, 14, 24]);
+    })), 'Đơn vị tham gia', 'don-vi-tham-gia-hoa-binh-xanh.xlsx', [34, 20, 36, 36, 18, 14, 24, 26, 22, 14, 24]);
   });
 
   // Hộp sửa đơn vị

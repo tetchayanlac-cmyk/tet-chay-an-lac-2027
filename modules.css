@@ -205,3 +205,76 @@
   .organizer-card { padding: 18px 16px; }
   .organizer-contact { flex-direction: column; gap: 10px; }
 }
+
+/* Hòa Bình Xanh: 2 cự ly, 3 phân khu */
+.distances.two { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 600px) { .distances.two { grid-template-columns: 1fr; } }
+.zones3 .card h3 small { display:block; font-family: var(--sans, inherit); font-size:.8rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color: var(--accent-dark, #8a6d00); margin-bottom:4px; }
+.zones3 .card ul { margin: 10px 0 0; padding-left: 18px; }
+.zones3 .card li { margin: 4px 0; font-size: .94rem; }
+.stages { margin-top: 20px; }
+
+/* ===== Hòa Bình Xanh: các mục mới ===== */
+.hero h1 em { display: inline-block; margin-top: .1em; }
+
+/* Mục đích (Giới thiệu) */
+.aims { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.aim { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 20px; box-shadow: var(--shadow); }
+.aim-num { display: inline-block; font-family: var(--serif); font-weight: 700; font-size: 1.6rem; color: var(--accent-dark); line-height: 1; margin-bottom: 10px; }
+.aim h3 { font-size: 1.08rem; margin-bottom: 6px; }
+.aim p { margin: 0; color: var(--muted); font-size: .93rem; }
+
+/* Bảng tổng quan */
+.overview { margin: 0 0 44px; background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+.overview > div { display: grid; grid-template-columns: 200px 1fr; gap: 16px; padding: 14px 22px; border-top: 1px solid var(--line); }
+.overview > div:first-child { border-top: 0; }
+.overview dt { font-weight: 600; color: var(--primary-dark); }
+.overview dd { margin: 0; }
+.overview dd small { display: block; color: var(--muted); font-size: .88rem; margin-top: 2px; }
+
+/* Bản đồ */
+.map-wrap { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.map-wrap .map-embed { margin-top: 0; }
+.map-wrap .map-embed iframe { height: 420px; }
+.map-info { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); display: grid; gap: 12px; }
+.map-info ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .95rem; }
+.map-info li { margin-bottom: 8px; }
+.map-info li b { color: var(--ink); }
+.map-info .btn { text-align: center; }
+
+/* Hoạt động */
+.activities { margin-top: 36px; }
+.activity-pair { margin-top: 20px; gap: 20px; grid-template-columns: 1fr 1fr; }
+.activity-pair .card-light { display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+.activity-pair .card-light .btn { align-self: flex-start; margin-top: 8px; }
+.activity-pair .eyebrow { margin: 0; }
+
+/* Tiêu chí */
+.criteria { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.criterion { background: #fff; border: 1px solid var(--line); border-left: 5px solid var(--primary); border-radius: var(--radius); padding: 22px 24px; }
+.criterion h3 { font-size: 1.15rem; color: var(--primary-dark); }
+.criterion ul { margin: 0; padding-left: 20px; }
+.criterion li { margin-bottom: 6px; font-size: .95rem; }
+
+/* Các kỳ */
+.editions { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; counter-reset: none; }
+.edition { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 24px 22px; box-shadow: var(--shadow); }
+.edition.current { border: 2px solid var(--primary); background: linear-gradient(180deg, #f4f7e6, #fff 60%); }
+.edition-tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: #eef0e2; color: var(--muted); margin-bottom: 10px; }
+.edition.current .edition-tag { background: var(--primary); color: #fff; }
+.edition h3 { font-size: 1.2rem; margin-bottom: 4px; }
+.edition-place { margin: 0 0 6px; font-weight: 600; color: var(--primary-dark); font-size: .95rem; }
+.edition .muted { margin: 0; }
+
+@media (max-width: 1024px) {
+  .aims { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .map-wrap, .activity-pair { grid-template-columns: 1fr; }
+  .editions { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .aims, .criteria { grid-template-columns: 1fr; }
+  .overview > div { grid-template-columns: 1fr; gap: 2px; padding: 12px 16px; }
+  .map-wrap .map-embed iframe { height: 320px; }
+}

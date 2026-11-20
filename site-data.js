@@ -99,7 +99,7 @@
         var n = btns[(j + btns.length) % btns.length]; select(n); n.focus();
       });
     });
-    var today = Math.floor((Date.now() - new Date('2027-01-09T00:00:00+07:00').getTime()) / 86400000);
+    var today = Math.floor((Date.now() - new Date('2026-12-24T00:00:00+07:00').getTime()) / 86400000);
     if (today >= 0 && today < btns.length) select(btns[today]);
   }
 

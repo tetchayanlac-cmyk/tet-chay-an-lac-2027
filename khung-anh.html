@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" type="image/webp" href="logo.webp">
-<title>Khung ảnh Tết Chay An Lạc 2027</title>
+<link rel="icon" type="image/png" href="logo-hbx-180.png">
+<title>Khung ảnh Tết Chay An Lạc – Hòa Bình Xanh</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,14 +94,14 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
   <a class="back" href="index.html#khung-anh">← Về trang lễ hội</a>
   <header>
     <div class="eyebrow">Công viên Hoà Bình · 24–27/12/2026</div>
-    <h1>Khung ảnh Tết Chay An Lạc 2027</h1>
+    <h1>Khung ảnh Tết Chay An Lạc – Hòa Bình Xanh</h1>
     <p>Chọn ảnh của bạn, kéo để căn vị trí, chỉnh to nhỏ và màu sắc, rồi tải ảnh về để đăng lên mạng xã hội.</p>
   </header>
 
   <main>
     <div>
       <div class="stage" id="stage">
-        <canvas id="cv" width="2000" height="2000" aria-label="Ảnh xem trước với khung Tết Chay An Lạc 2027"></canvas>
+        <canvas id="cv" width="2000" height="2000" aria-label="Ảnh xem trước với khung Tết Chay An Lạc – Hòa Bình Xanh"></canvas>
       </div>
       <p class="hint">Kéo ảnh để di chuyển · Cuộn chuột hoặc chụm 2 ngón để phóng to · Có thể kéo thả ảnh vào khung</p>
     </div>
@@ -419,7 +419,7 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
   function showModal(blob, filename, inApp) {
     const url = URL.createObjectURL(blob);
     $("modalImg").src = url;
-    $("modalDl").href = url; $("modalDl").download = filename || "tet-chay-an-lac-2027.jpg";
+    $("modalDl").href = url; $("modalDl").download = filename || "tet-chay-an-lac-hoa-binh-xanh.jpg";
     $("modalText").textContent = inApp
       ? "Ứng dụng này (Zalo/Facebook…) không cho tải file trực tiếp. Hãy nhấn giữ vào ảnh → “Lưu ảnh”, hoặc mở trang này bằng Chrome/Safari (menu ⋯ → Mở bằng trình duyệt)."
       : "Nhấn giữ ảnh (điện thoại) hoặc chuột phải → “Lưu hình ảnh thành…” (máy tính) để lưu.";
@@ -460,9 +460,9 @@ label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--accen
     const c = out.getContext("2d");
     c.fillStyle = "#fff"; c.fillRect(0, 0, W, W); // JPG không có nền trong suốt
     drawPhoto(c); c.drawImage(frame, 0, 0);
-    saveCanvas(out, "image/jpeg", 0.92, "tet-chay-an-lac-2027.jpg");
+    saveCanvas(out, "image/jpeg", 0.92, "tet-chay-an-lac-hoa-binh-xanh.jpg");
   };
-  $("saveFrame").onclick = () => saveCanvas(frame, "image/png", undefined, "khung-tet-chay-an-lac-2027.png");
+  $("saveFrame").onclick = () => saveCanvas(frame, "image/png", undefined, "khung-tet-chay-an-lac-hoa-binh-xanh.png");
 
   buildFrame(); syncUI(); render();
   const fontReady = document.fonts ? document.fonts.load(`600 150px Oswald`, TEXT) : Promise.resolve();

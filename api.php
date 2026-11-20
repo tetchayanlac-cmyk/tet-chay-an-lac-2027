@@ -1,5 +1,5 @@
 <?php
-// API cho trang quản trị Tết Chay An Lạc 2027 (chạy trên Hostinger, PHP 7.4+).
+// API cho trang quản trị Tết Chay An Lạc – Hòa Bình Xanh (chạy trên Hostinger, PHP 7.4+).
 // Dữ liệu công khai: data/content.json, data/tin-tuc.json, data/don-vi.json, data/logos/, data/tin-tuc/
 // Dữ liệu riêng tư (chặn bằng .htaccess): data/private/dang-ky.json, data/private/backups/
 declare(strict_types=1);

@@ -1,7 +1,7 @@
-# Website Tết Chay An Lạc 2027
+# Website Tết Chay An Lạc – Hòa Bình Xanh
 
-Lễ hội **Tết Chay An Lạc 2027** – “Xuân An Lạc · Sống xanh · Gìn giữ hồn Việt”
-09 – 13/01/2027 · Công viên Thống Nhất, Hà Nội.
+Hội chợ Triển lãm Sản phẩm Chay, Xanh và Phát triển Bền vững **“Tết Chay An Lạc”** – chủ đề “Hòa Bình Xanh”
+24 – 27/12/2026 · Công viên Hòa Bình, phường Xuân Đỉnh, Hà Nội.
 
 ## Cấu trúc
 
@@ -9,7 +9,7 @@ Lễ hội **Tết Chay An Lạc 2027** – “Xuân An Lạc · Sống xanh · 
 |---|---|
 | `index.html`, `styles.css`, `script.js` | Trang chủ |
 | `site-data.js`, `modules.css` | Hiển thị dữ liệu từ trang quản trị (đơn vị tham gia, tin tức, lịch trình, tài trợ, liên hệ) |
-| `khung-anh.html` | Công cụ ghép ảnh vào khung 2027 |
+| `khung-anh.html` | Công cụ ghép ảnh vào khung lễ hội |
 | `admin.html`, `admin.js`, `admin.css` | Trang quản trị |
 | `api.php` | Máy chủ cho trang quản trị và form đăng ký (cần PHP 7.4+) |
 | `data/` | Dữ liệu công khai (JSON, logo, ảnh tin tức) |

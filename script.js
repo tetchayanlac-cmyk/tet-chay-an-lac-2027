@@ -13,9 +13,9 @@
     }
   });
 
-  // Countdown to opening day (09/01/2027, 08:00 Hanoi time)
-  var target = new Date('2027-01-09T08:00:00+07:00').getTime();
-  var end = new Date('2027-01-13T23:59:59+07:00').getTime();
+  // Countdown to opening day (24/12/2026, 08:00 Hanoi time)
+  var target = new Date('2026-12-24T08:00:00+07:00').getTime();
+  var end = new Date('2026-12-27T22:00:00+07:00').getTime();
   var cd = document.getElementById('countdown');
   var cells = {};
   cd.querySelectorAll('[data-cd]').forEach(function (el) { cells[el.dataset.cd] = el; });
@@ -25,7 +25,7 @@
     var diff = target - now;
     if (diff <= 0) {
       cd.classList.add('done');
-      cd.textContent = now < end ? 'Lễ hội đang diễn ra – hẹn gặp bạn tại Công viên Thống Nhất!' : 'Cảm ơn bạn đã đồng hành cùng Tết Chay An Lạc 2027!';
+      cd.textContent = now < end ? 'Hội chợ đang diễn ra – hẹn gặp bạn tại Công viên Hòa Bình!' : 'Cảm ơn bạn đã đồng hành cùng Tết Chay An Lạc – Hòa Bình Xanh!';
       return;
     }
     var s = Math.floor(diff / 1000);
@@ -57,7 +57,7 @@
     });
   });
   // During the festival, open today's tab automatically
-  var day = Math.floor((Date.now() - new Date('2027-01-09T00:00:00+07:00').getTime()) / 86400000);
+  var day = Math.floor((Date.now() - new Date('2026-12-24T00:00:00+07:00').getTime()) / 86400000);
   if (day >= 0 && day < tabs.length) selectTab(tabs[day]);
 
   // Zone map <-> zone cards
