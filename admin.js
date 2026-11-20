@@ -33,7 +33,18 @@
     day: function () { return { tab: '', nhan: '', tieuDe: '', muc: [] }; },
     item: function () { return { gio: '', ten: '', moTa: '', noiBat: false }; },
     tier: function () { return { ten: '', gia: '', nhan: '', kieu: 'green', quyenLoi: [] }; },
-    topic: function () { return { ten: '', gia: '', moTa: '' }; }
+    topic: function () { return { ten: '', gia: '', moTa: '' }; },
+    stat: function () { return { so: '', nhan: '' }; },
+    aim: function () { return { tieuDe: '', moTa: '' }; },
+    field: function () { return { nhan: '', giaTri: '', ghiChu: '' }; },
+    zone: function () { return { nhan: '', ten: '', moTa: '' }; },
+    stage: function () { return { ten: '', moTa: '' }; },
+    info: function () { return { nhan: '', noiDung: '' }; },
+    legend: function () { return { mau: '#7a9a01', nhan: '', moTa: '' }; },
+    card: function () { return { tieuDe: '', moTa: '' }; },
+    group: function () { return { tieuDe: '', muc: [] }; },
+    edition: function () { return { nhan: '', ten: '', diaDiem: '', moTa: '', hienTai: false }; },
+    custom: function () { return { tieuDe: 'Mục mới', nhan: '', moTa: '', dong: [], lienKet: '', nutChu: '', menu: '', an: false }; }
   };
 
   var S = {
@@ -550,6 +561,11 @@
     if (opt.type === 'lines') return '<label' + cls + '>' + esc(label) + ' <small>(mỗi dòng một ý)</small><textarea data-path="' + path + '" data-type="lines" rows="' + (opt.rows || 4) + '">' + esc((v || []).join('\n')) + '</textarea></label>';
     if (opt.options) return '<label' + cls + '>' + esc(label) + '<select data-path="' + path + '">' + opt.options.map(function (o) { return '<option value="' + o[0] + '"' + (v === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>';
     if (opt.rows) return '<label' + cls + '>' + esc(label) + '<textarea data-path="' + path + '" rows="' + opt.rows + '">' + esc(v || '') + '</textarea></label>';
+    if (opt.type === 'color') return '<label' + cls + '>' + esc(label) + '<input type="color" data-path="' + path + '" value="' + esc(/^#[0-9a-f]{6}$/i.test(v || '') ? v : '#7a9a01') + '"></label>';
+    if (opt.type === 'datetime') return '<label' + cls + '>' + esc(label) + '<input type="datetime-local" data-path="' + path + '" value="' + esc(v || '') + '"></label>';
+    if (opt.type === 'image') return '<div class="img-field' + (opt.cls ? ' ' + opt.cls : '') + '"><span class="lbl">' + esc(label) + '</span>' +
+      (v ? '<img src="' + esc(v) + '?t=' + Date.now() + '" alt="">' : '<span class="hint">Chưa có ảnh</span>') +
+      '<label class="btn btn-sm">Tải ảnh mới lên<input type="file" accept="image/*" data-upload="' + path + '" hidden></label><small class="hint">' + esc(v || '') + '</small></div>';
     return '<label' + cls + '>' + esc(label) + '<input data-path="' + path + '" value="' + esc(v || '') + '"' + (opt.ph ? ' placeholder="' + esc(opt.ph) + '"' : '') + '></label>';
   }
   function rowBtns(path, i, n) {
@@ -558,52 +574,111 @@
       (i < n - 1 ? '<button type="button" class="icon-btn" data-act="down" data-path="' + path + '" data-i="' + i + '" title="Xuống">↓</button>' : '') +
       '<button type="button" class="icon-btn del" data-act="del" data-path="' + path + '" data-i="' + i + '">Xóa</button></span>';
   }
+  // Danh sách các dòng sửa được: mỗi dòng có các trường, nút lên/xuống/xóa và nút "+ Thêm"
+  function listEditor(path, tpl, fields, addLabel, titleOf) {
+    var arr = getPath(S.content, path) || [], h = '';
+    arr.forEach(function (it, i) {
+      var p = path + '.' + i;
+      h += '<div class="sub"><div class="sub-head"><b>' + esc(titleOf(it, i)) + '</b>' + rowBtns(path, i, arr.length) + '</div><div class="grid">' +
+        fields.map(function (f) { return fld(f[0], p + '.' + f[1], f[2]); }).join('') + '</div></div>';
+    });
+    return h + '<p><button type="button" class="btn btn-sm" data-act="add" data-path="' + path + '" data-tpl="' + tpl + '">' + esc(addLabel) + '</button></p>';
+  }
+  function panel(title, hint, body, open) {
+    return '<details class="panel cpanel"' + (open ? ' open' : '') + '><summary><h3>' + esc(title) + '</h3>' + (hint ? '<span class="hint">' + esc(hint) + '</span>' : '') + '</summary>' + body + '</details>';
+  }
+  function headFields(base) {
+    return '<div class="grid">' + fld('Tiêu đề mục', base + '.tieuDe') + '</div>' + fld('Đoạn mô tả dưới tiêu đề', base + '.moTa', { rows: 3 });
+  }
+  function ensureContent() {
+    var c = S.content;
+    ['hero', 'gioiThieu', 'toChuc', 'tongQuan', 'banDo', 'soDo', 'hoatDong', 'tieuChi', 'cacKy'].forEach(function (k) { if (!c[k] || typeof c[k] !== 'object') c[k] = {}; });
+    ['phanKhu', 'sanKhau', 'mucTuyChinh', 'lichTrinh'].forEach(function (k) { if (!Array.isArray(c[k])) c[k] = []; });
+  }
+
   function renderContent() {
+    ensureContent();
+    var openSet = {};
+    $$('#content-form details[open]').forEach(function (d) { openSet[d.dataset.key] = true; });
     var c = S.content, h = '';
-    h += '<div class="panel"><h3>Thông tin liên hệ</h3><div class="grid">' +
-      fld('Hotline', 'lienHe.hotline', { ph: '09xx xxx xxx' }) + fld('Email', 'lienHe.email') +
-      fld('Fanpage Facebook', 'lienHe.fanpage', { ph: 'https://facebook.com/…' }) + fld('Zalo (số hoặc link)', 'lienHe.zalo') +
-      fld('Địa chỉ', 'lienHe.diaChi') + '</div></div>';
-    h += '<div class="panel"><h3>Cổng đăng ký</h3>' + fld('Mở nhận đăng ký trên website', 'dangKyMo', { type: 'bool' }) +
-      '<p class="hint">Bỏ chọn để đóng form đăng ký (ví dụ khi đã đủ gian hàng).</p></div>';
-    h += '<div class="panel"><h3>Thông báo trên đầu website</h3><div class="grid">' +
-      fld('Hiện thông báo', 'thongBao.bat', { type: 'bool' }) +
-      fld('Kiểu', 'thongBao.kieu', { options: [['info', 'Thông tin (màu xanh)'], ['khan', 'Khẩn (màu cam)']] }) +
-      fld('Đường dẫn khi bấm (không bắt buộc)', 'thongBao.lienKet', { ph: '#lich-trinh hoặc https://…' }) + '</div>' +
-      fld('Nội dung thông báo', 'thongBao.noiDung', { rows: 2 }) + '</div>';
-    // Lịch trình
-    h += '<div class="panel"><h3>Lịch trình các ngày</h3>';
+    var parts = [];
+    parts.push(['dau-trang', 'Đầu trang', 'Tên sự kiện, thời gian, địa điểm, đếm ngược, các con số nổi bật',
+      '<div class="grid">' + fld('Dòng chữ nhỏ phía trên', 'hero.nhanTren') + fld('Tên dòng 1', 'hero.tieuDe1') + fld('Tên dòng 2 (chữ nghiêng)', 'hero.tieuDe2') +
+      fld('Thời gian hiển thị', 'hero.thoiGian') + fld('Địa điểm hiển thị', 'hero.diaDiem') +
+      fld('Bắt đầu (đếm ngược)', 'hero.batDau', { type: 'datetime' }) + fld('Kết thúc', 'hero.ketThuc', { type: 'datetime' }) + '</div>' +
+      '<h4>Các con số nổi bật</h4>' + listEditor('hero.thongKe', 'stat', [['Con số', 'so'], ['Chú thích', 'nhan']], '+ Thêm con số', function (s, i) { return (s.so || '…') + ' ' + (s.nhan || '') ; })]);
+    parts.push(['gioi-thieu', '1. Giới thiệu', 'Đoạn giới thiệu, các mục đích, đơn vị tổ chức',
+      headFields('gioiThieu') + '<h4>Mục đích</h4>' +
+      listEditor('gioiThieu.mucDich', 'aim', [['Tiêu đề', 'tieuDe'], ['Nội dung', 'moTa', { rows: 2 }]], '+ Thêm mục đích', function (m, i) { return (i + 1) + '. ' + (m.tieuDe || 'Mục mới'); }) +
+      '<h4>Đơn vị tổ chức</h4><div class="grid">' + fld('Nhãn', 'toChuc.nhan', { ph: 'Đơn vị tổ chức' }) + fld('Tên đơn vị', 'toChuc.ten') + fld('Dòng phụ', 'toChuc.phu') + '</div>']);
+    parts.push(['tong-quan', '2. Tổng quan', 'Bảng thông tin chung (thêm trường tùy ý), phân khu, sân khấu',
+      '<div class="grid">' + fld('Tiêu đề mục', 'tongQuan.tieuDe') + '</div><h4>Các trường thông tin</h4>' +
+      listEditor('tongQuan.truong', 'field', [['Tên trường', 'nhan'], ['Nội dung', 'giaTri', { rows: 2 }], ['Ghi chú nhỏ (không bắt buộc)', 'ghiChu']], '+ Thêm trường thông tin', function (r) { return r.nhan || 'Trường mới'; }) +
+      '<h4>Phân khu</h4>' + listEditor('phanKhu', 'zone', [['Nhãn nhỏ', 'nhan'], ['Tên phân khu', 'ten'], ['Mô tả', 'moTa', { rows: 2 }]], '+ Thêm phân khu', function (z) { return z.ten || 'Phân khu mới'; }) +
+      '<h4>Sân khấu &amp; tiện ích</h4>' + listEditor('sanKhau', 'stage', [['Tên', 'ten'], ['Mô tả', 'moTa', { rows: 2 }]], '+ Thêm thẻ', function (z) { return z.ten || 'Thẻ mới'; })]);
+    parts.push(['ban-do', '3. Bản đồ', 'Vị trí trên Google Maps, thông tin đi lại, link hội chợ 3D',
+      headFields('banDo') + '<div class="grid">' +
+      fld('Tọa độ (vĩ độ, kinh độ)', 'banDo.toaDo', { ph: '21.0663226,105.7867101' }) + fld('Link hội chợ online 3D (để trống để ẩn nút)', 'banDo.link3D', { ph: 'https://…' }) + '</div>' +
+      '<p class="hint">Lấy tọa độ: mở Google Maps, nhấp chuột phải vào vị trí → bấm dòng số đầu tiên để sao chép.</p><h4>Thông tin đi lại</h4>' +
+      listEditor('banDo.thongTin', 'info', [['Nhãn', 'nhan'], ['Nội dung', 'noiDung', { rows: 2 }]], '+ Thêm dòng', function (t) { return t.nhan || 'Dòng mới'; })]);
+    parts.push(['so-do', '4. Sơ đồ gian hàng', 'Ảnh sơ đồ và chú thích màu',
+      headFields('soDo') + fld('Ảnh sơ đồ', 'soDo.anh', { type: 'image' }) + '<h4>Chú thích</h4>' +
+      listEditor('soDo.chuThich', 'legend', [['Màu', 'mau', { type: 'color' }], ['Tên', 'nhan'], ['Mô tả', 'moTa']], '+ Thêm chú thích', function (l) { return l.nhan || 'Chú thích mới'; })]);
+    var sched = '';
     (c.lichTrinh || []).forEach(function (d, i) {
       var p = 'lichTrinh.' + i;
-      h += '<div class="sub"><div class="sub-head"><b>' + esc(d.nhan || 'Ngày ' + (i + 1)) + '</b>' + rowBtns('lichTrinh', i, c.lichTrinh.length) + '</div><div class="grid">' +
-        fld('Nhãn trên nút chọn ngày', p + '.tab', { ph: 'T7 · 09/01' }) + fld('Nhãn nhỏ', p + '.nhan', { ph: 'Ngày 1' }) + fld('Chủ đề ngày', p + '.tieuDe') + '</div>';
+      sched += '<div class="sub"><div class="sub-head"><b>' + esc(d.nhan || 'Ngày ' + (i + 1)) + '</b>' + rowBtns('lichTrinh', i, c.lichTrinh.length) + '</div><div class="grid">' +
+        fld('Nhãn trên nút chọn ngày', p + '.tab', { ph: 'T5 · 24/12' }) + fld('Nhãn nhỏ', p + '.nhan', { ph: 'Ngày 1' }) + fld('Chủ đề ngày', p + '.tieuDe') + '</div>';
       (d.muc || []).forEach(function (m, j) {
         var q = p + '.muc.' + j;
-        h += '<div class="item-row">' + fld('Thời gian', q + '.gio') + fld('Hoạt động', q + '.ten') + fld('Mô tả', q + '.moTa', { rows: 2 }) +
+        sched += '<div class="item-row">' + fld('Thời gian', q + '.gio') + fld('Hoạt động', q + '.ten') + fld('Mô tả', q + '.moTa', { rows: 2 }) +
           fld('Nổi bật', q + '.noiBat', { type: 'bool' }) + rowBtns(p + '.muc', j, d.muc.length) + '</div>';
       });
-      h += '<button type="button" class="btn btn-sm" data-act="add" data-path="' + p + '.muc" data-tpl="item">+ Thêm hoạt động</button></div>';
+      sched += '<button type="button" class="btn btn-sm" data-act="add" data-path="' + p + '.muc" data-tpl="item">+ Thêm hoạt động</button></div>';
     });
-    h += '<p><button type="button" class="btn btn-sm" data-act="add" data-path="lichTrinh" data-tpl="day">+ Thêm ngày</button></p></div>';
-    // Tài trợ
-    h += '<div class="panel"><h3>Gói tài trợ tổng thể</h3>';
-    (c.taiTro.tongThe || []).forEach(function (t, i) {
-      var p = 'taiTro.tongThe.' + i;
-      h += '<div class="sub"><div class="sub-head"><b>' + esc(t.ten || 'Gói mới') + '</b>' + rowBtns('taiTro.tongThe', i, c.taiTro.tongThe.length) + '</div><div class="grid">' +
-        fld('Tên gói', p + '.ten') + fld('Mức kinh phí (VNĐ)', p + '.gia', { ph: '100.000.000' }) + fld('Mô tả ngắn', p + '.nhan') +
-        fld('Màu', p + '.kieu', { options: [['diamond', 'Kim cương'], ['gold', 'Vàng'], ['silver', 'Bạc'], ['green', 'Xanh']] }) + '</div>' +
-        fld('Quyền lợi', p + '.quyenLoi', { type: 'lines' }) + '</div>';
-    });
-    h += '<p><button type="button" class="btn btn-sm" data-act="add" data-path="taiTro.tongThe" data-tpl="tier">+ Thêm gói</button></p></div>';
-    h += '<div class="panel"><h3>Tài trợ hạng mục chuyên đề</h3>';
-    (c.taiTro.chuyenDe || []).forEach(function (t, i) {
-      var p = 'taiTro.chuyenDe.' + i;
-      h += '<div class="sub"><div class="sub-head"><b>' + esc(t.ten || 'Hạng mục mới') + '</b>' + rowBtns('taiTro.chuyenDe', i, c.taiTro.chuyenDe.length) + '</div><div class="grid">' +
-        fld('Tên hạng mục', p + '.ten') + fld('Mức kinh phí (VNĐ)', p + '.gia') + '</div>' + fld('Quyền lợi chính', p + '.moTa', { rows: 2 }) + '</div>';
-    });
-    h += '<p><button type="button" class="btn btn-sm" data-act="add" data-path="taiTro.chuyenDe" data-tpl="topic">+ Thêm hạng mục</button></p></div>';
+    parts.push(['hoat-dong', '5. Hoạt động chính', 'Lịch từng ngày và các hoạt động diễn ra hằng ngày',
+      headFields('hoatDong') + '<h4>Lịch từng ngày</h4>' + sched +
+      '<p><button type="button" class="btn btn-sm" data-act="add" data-path="lichTrinh" data-tpl="day">+ Thêm ngày</button></p>' +
+      '<h4>Hoạt động hằng ngày</h4>' + listEditor('hoatDong.khac', 'card', [['Tên hoạt động', 'tieuDe'], ['Mô tả', 'moTa', { rows: 2 }]], '+ Thêm hoạt động', function (a) { return a.tieuDe || 'Hoạt động mới'; })]);
+    parts.push(['tieu-chi', '6. Tiêu chí', 'Các nhóm tiêu chí tham gia, mỗi nhóm nhiều dòng',
+      headFields('tieuChi') +
+      listEditor('tieuChi.nhom', 'group', [['Tên nhóm', 'tieuDe'], ['Các tiêu chí', 'muc', { type: 'lines', rows: 5 }]], '+ Thêm nhóm tiêu chí', function (g) { return g.tieuDe || 'Nhóm mới'; })]);
+    parts.push(['cac-ky', '7. Các kỳ Tết Chay An Lạc', 'Danh sách các kỳ tổ chức',
+      '<div class="grid">' + fld('Tiêu đề mục', 'cacKy.tieuDe') + '</div>' +
+      listEditor('cacKy.ky', 'edition', [['Nhãn', 'nhan', { ph: 'Kỳ trước / Kỳ này' }], ['Tên kỳ', 'ten'], ['Địa điểm, thời gian', 'diaDiem'], ['Mô tả', 'moTa', { rows: 2 }], ['Đánh dấu là kỳ hiện tại', 'hienTai', { type: 'bool' }]], '+ Thêm kỳ', function (k) { return k.ten || 'Kỳ mới'; })]);
+    parts.push(['tuy-chinh', 'Mục tùy chỉnh', 'Thêm mục mới hiển thị trước phần Đơn vị tham gia',
+      '<p class="hint">Mỗi mục là một phần riêng trên trang chủ: tiêu đề, đoạn văn (để trống một dòng giữa các đoạn), danh sách gạch đầu dòng, nút bấm. Điền “Tên trên menu” nếu muốn mục xuất hiện ở thanh menu.</p>' +
+      listEditor('mucTuyChinh', 'custom', [['Tiêu đề', 'tieuDe'], ['Dòng chữ nhỏ phía trên', 'nhan'], ['Tên trên menu (không bắt buộc)', 'menu'],
+        ['Nội dung', 'moTa', { rows: 4 }], ['Danh sách', 'dong', { type: 'lines', rows: 3 }], ['Chữ trên nút', 'nutChu', { ph: 'Xem thêm' }],
+        ['Link của nút (không bắt buộc)', 'lienKet', { ph: 'https://… hoặc #dang-ky' }], ['Tạm ẩn mục này', 'an', { type: 'bool' }]], '+ Thêm mục mới', function (m) { return (m.an ? '(ẩn) ' : '') + (m.tieuDe || 'Mục mới'); })]);
+    parts.push(['lien-he', 'Liên hệ, đăng ký, thông báo', 'Hotline, email, fanpage; đóng/mở form; thông báo đầu trang',
+      '<div class="grid">' +
+      fld('Hotline', 'lienHe.hotline', { ph: '09xx xxx xxx' }) + fld('Email', 'lienHe.email') +
+      fld('Fanpage Facebook', 'lienHe.fanpage', { ph: 'https://facebook.com/…' }) + fld('Zalo (số hoặc link)', 'lienHe.zalo') +
+      fld('Địa chỉ', 'lienHe.diaChi') + '</div>' +
+      fld('Mở nhận đăng ký trên website', 'dangKyMo', { type: 'bool' }) +
+      '<h4>Thông báo trên đầu website</h4><div class="grid">' + fld('Hiện thông báo', 'thongBao.bat', { type: 'bool' }) +
+      fld('Kiểu', 'thongBao.kieu', { options: [['info', 'Thông tin (màu xanh)'], ['khan', 'Khẩn (màu cam)']] }) +
+      fld('Đường dẫn khi bấm (không bắt buộc)', 'thongBao.lienKet', { ph: '#lich-trinh hoặc https://…' }) + '</div>' +
+      fld('Nội dung thông báo', 'thongBao.noiDung', { rows: 2 })]);
+    h = parts.map(function (p) { return panel(p[1], p[2], p[3], openSet[p[0]]).replace('<details ', '<details data-key="' + p[0] + '" '); }).join('');
     $('#content-form').innerHTML = h;
   }
+  // Tải ảnh (ví dụ ảnh sơ đồ) lên máy chủ ngay khi chọn file
+  $('#content-form').addEventListener('change', function (e) {
+    var el = e.target, path = el.dataset.upload;
+    if (!path || !el.files || !el.files[0]) return;
+    var file = el.files[0]; el.value = '';
+    var name = slug(path.split('.')[0]) + '-' + Date.now().toString(36) + '.webp';
+    toast('Đang tải ảnh lên…');
+    toWebp(file, 2600).then(function (blob) {
+      return api('upload', { method: 'POST', query: { folder: 'images', name: name }, type: 'image/webp', body: blob });
+    }).then(function () {
+      setPath(S.content, path, 'data/hinh/' + name);
+      setDirty('content', true); renderContent();
+      toast('Đã tải ảnh lên. Bấm “Lưu & xuất bản” để áp dụng trên website.');
+    }).catch(function (err) { toast('Chưa tải được ảnh: ' + err.message, true); });
+  });
   $('#content-form').addEventListener('input', function (e) {
     var el = e.target, p = el.dataset.path; if (!p) return;
     var v = el.dataset.type === 'bool' ? el.checked

@@ -167,3 +167,22 @@ textarea { resize: vertical; }
   .news-item .row-actions { grid-column: span 2; }
   .ibar { grid-template-columns: 110px 1fr 32px; }
 }
+
+/* Nội dung website: các mục gập/mở */
+.cpanel { padding: 0; }
+.cpanel > summary { list-style: none; cursor: pointer; padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.cpanel > summary::-webkit-details-marker { display: none; }
+.cpanel > summary::before { content: "▸"; color: var(--primary); font-size: .9rem; transition: transform .15s; }
+.cpanel[open] > summary::before { transform: rotate(90deg); }
+.cpanel > summary h3 { margin: 0; font-size: 1.05rem; }
+.cpanel > summary .hint { margin: 0; font-size: .82rem; }
+.cpanel[open] > summary { border-bottom: 1px solid var(--line); }
+.cpanel > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.cpanel > :last-child { margin-bottom: 18px; }
+.cpanel > .grid:first-of-type, .cpanel > summary + * { margin-top: 16px; }
+.cpanel h4 { margin: 20px 20px 4px; font-size: .92rem; color: var(--primary-dark); text-transform: uppercase; letter-spacing: .05em; }
+.cpanel .sub .grid label:has(textarea) { grid-column: 1 / -1; }
+.img-field { display: grid; gap: 8px; justify-items: start; margin-top: 12px; }
+.img-field .lbl { font-weight: 600; font-size: .85rem; }
+.img-field img { max-width: min(520px, 100%); border-radius: 8px; border: 1px solid var(--line); }
+input[type=color] { width: 64px; height: 38px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }

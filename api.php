@@ -16,7 +16,7 @@ const DATA = __DIR__ . '/data';
 const PRIV = DATA . '/private';
 const REGS = PRIV . '/dang-ky.json';
 const SAVE_FILES = ['content' => 'content.json', 'news' => 'tin-tuc.json', 'units' => 'don-vi.json'];
-const UPLOAD_DIRS = ['logos' => 'logos', 'news' => 'tin-tuc'];
+const UPLOAD_DIRS = ['logos' => 'logos', 'news' => 'tin-tuc', 'images' => 'hinh'];
 const NAME_RE = '/^[a-z0-9][a-z0-9-]{0,80}\.(webp|png|jpg)$/';
 const STATUSES = ['moi', 'da-lien-he', 'hoan-tat', 'huy'];
 const JSON_OUT = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT;
@@ -91,7 +91,7 @@ function rateLimited(string $ip): bool {
   return $hit;
 }
 
-foreach ([DATA, PRIV, DATA . '/logos', DATA . '/tin-tuc'] as $d) {
+foreach ([DATA, PRIV, DATA . '/logos', DATA . '/tin-tuc', DATA . '/hinh'] as $d) {
   if (!is_dir($d)) mkdir($d, 0755, true);
 }
 if (!is_file(PRIV . '/.htaccess')) {

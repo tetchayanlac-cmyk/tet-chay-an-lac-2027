@@ -7,22 +7,22 @@
   <meta name="description" content="Hội chợ Triển lãm Sản phẩm Chay, Xanh và Phát triển Bền vững “Tết Chay An Lạc”, chủ đề “Hòa Bình Xanh” – 24–27/12/2026, 08:00–22:00 tại Công viên Hòa Bình, đường Hoàng Minh Thảo, phường Xuân Đỉnh, Hà Nội. 150 gian hàng thực phẩm chay, đặc sản vùng miền, nông nghiệp xanh.">
   <meta property="og:title" content="Tết Chay An Lạc – Hòa Bình Xanh">
   <meta property="og:description" content="24–27/12/2026 · Công viên Hòa Bình, Hà Nội · Hội chợ Triển lãm Sản phẩm Chay, Xanh và Phát triển Bền vững">
-  <meta property="og:image" content="logo-hbx.webp">
+  <meta property="og:image" content="logo-tcal.webp">
   <meta name="theme-color" content="#4c6404">
-  <link rel="icon" type="image/png" href="logo-hbx-180.png">
-  <link rel="apple-touch-icon" href="logo-hbx-180.png">
+  <link rel="icon" type="image/png" href="logo-tcal-180.png">
+  <link rel="apple-touch-icon" href="logo-tcal-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261120a">
-  <link rel="stylesheet" href="modules.css?v=20261120a">
+  <link rel="stylesheet" href="styles.css?v=20261120c">
+  <link rel="stylesheet" href="modules.css?v=20261120c">
 </head>
 <body>
 
 <header class="site-header" id="top">
   <div class="container nav-wrap">
     <a href="#top" class="brand" aria-label="Tết Chay An Lạc – Hòa Bình Xanh, về đầu trang">
-      <img class="brand-mark" src="logo-hbx.webp" alt="" width="44" height="44">
+      <img class="brand-mark" src="logo-tcal.webp" alt="" width="44" height="44">
       <span class="brand-text">Tết Chay <b>An Lạc</b></span>
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Mở menu">
@@ -54,12 +54,12 @@
     <span class="blossom b4"></span><span class="blossom b5"></span><span class="blossom b6"></span>
   </div>
   <div class="container hero-inner">
-    <img class="hero-logo" src="logo-hbx.webp" alt="Logo Tết Chay An Lạc – Hòa Bình Xanh" width="200" height="200">
+    <img class="hero-logo" src="logo-tcal.webp" alt="Logo Tết Chay An Lạc" width="200" height="200">
     <p class="eyebrow">Hội chợ Triển lãm Sản phẩm Chay, Xanh và Phát triển Bền vững</p>
     <h1>Tết Chay An Lạc<br><em>Hòa Bình Xanh</em></h1>
     <ul class="hero-meta">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v3M17 2v3M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>24 – 27/12/2026 · 08:00 – 22:00</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Công viên Hòa Bình, phường Xuân Đỉnh, Hà Nội</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v3M17 2v3M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg><span id="hero-time">24 – 27/12/2026 · 08:00 – 22:00</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="hero-place">Công viên Hòa Bình, phường Xuân Đỉnh, Hà Nội</span></li>
     </ul>
     <div class="countdown" id="countdown" aria-live="polite">
       <div><b data-cd="d">--</b><span>ngày</span></div>
@@ -73,7 +73,7 @@
       <a href="#ban-do" class="btn btn-ghost">Chỉ đường</a>
     </div>
   </div>
-  <div class="stats container">
+  <div class="stats container" id="hero-stats">
     <div><b>4</b><span>ngày hội chợ</span></div>
     <div><b>150</b><span>gian hàng</span></div>
     <div><b>3</b><span>phân khu</span></div>
@@ -190,8 +190,8 @@
           <li><b>Gửi xe:</b> bãi trông giữ xe tạm tại vị trí được cơ quan chức năng và đơn vị quản lý công viên chấp thuận. Vui lòng không đỗ xe tràn ra lòng đường, vỉa hè.</li>
           <li><b>Cao điểm:</b> các buổi tối cuối tuần 26–27/12 và sáng sớm 27/12 (Vegan Run). Nên đi phương tiện công cộng.</li>
         </ul>
-        <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=21.0663226,105.7867101" target="_blank" rel="noopener">Mở Google Maps chỉ đường ↗</a>
-        <a class="btn btn-outline" href="https://claude.ai/artifact/Rj9Z1noNM2Q68Be5NYNCq2" target="_blank" rel="noopener">Tham quan hội chợ online 3D ↗</a>
+        <a class="btn btn-primary" id="map-dir" href="https://www.google.com/maps/dir/?api=1&amp;destination=21.0663226,105.7867101" target="_blank" rel="noopener">Mở Google Maps chỉ đường ↗</a>
+        <a class="btn btn-outline" id="map-3d" href="https://claude.ai/artifact/Rj9Z1noNM2Q68Be5NYNCq2" target="_blank" rel="noopener">Tham quan hội chợ online 3D ↗</a>
       </div>
     </div>
   </div>
@@ -382,6 +382,9 @@
   </div>
 </section>
 
+<!-- MỤC TÙY CHỈNH (thêm từ trang quản trị) -->
+<div id="muc-tuy-chinh"></div>
+
 <!-- ĐƠN VỊ THAM GIA -->
 <section id="don-vi" class="section section-tint">
   <div class="container">
@@ -487,7 +490,7 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="logo-hbx.webp" alt="Logo Tết Chay An Lạc – Hòa Bình Xanh" width="88" height="88">
+      <img src="logo-tcal.webp" alt="Logo Tết Chay An Lạc" width="88" height="88">
       <p class="brand-text">Tết Chay <b>An Lạc</b></p>
       <p>Chủ đề “Hòa Bình Xanh” · 24 – 27/12/2026 · Công viên Hòa Bình, phường Xuân Đỉnh, Hà Nội</p>
       <p class="footer-contact">Hotline <a href="tel:0928577156">0928 577 156</a> · <a href="mailto:tetchayanlac@gmail.com">tetchayanlac@gmail.com</a> · <a href="https://www.facebook.com/profile.php?id=61594895070275" target="_blank" rel="noopener">Fanpage Tết Chay An Lạc</a></p>
@@ -497,7 +500,7 @@
   <p class="copy">© 2026 Ban Tổ chức Hội chợ Tết Chay An Lạc · Công ty Cổ phần Đầu tư Tân Tân</p>
 </footer>
 
-<script src="script.js?v=20261120a"></script>
-<script src="site-data.js?v=20261120a"></script>
+<script src="script.js?v=20261120c"></script>
+<script src="site-data.js?v=20261120c"></script>
 </body>
 </html>

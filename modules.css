@@ -278,3 +278,8 @@
   .overview > div { grid-template-columns: 1fr; gap: 2px; padding: 12px 16px; }
   .map-wrap .map-embed iframe { height: 320px; }
 }
+
+/* Mục tùy chỉnh thêm từ trang quản trị */
+.custom-section .lead p { margin: 0 0 .8em; }
+.custom-list { max-width: 820px; margin: 0 0 24px; padding: 0; list-style: none; display: grid; gap: 10px; }
+.custom-list li { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; }

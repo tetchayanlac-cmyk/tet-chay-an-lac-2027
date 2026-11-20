@@ -20,6 +20,13 @@
   var cells = {};
   cd.querySelectorAll('[data-cd]').forEach(function (el) { cells[el.dataset.cd] = el; });
   function pad(n) { return String(n).padStart(2, '0'); }
+  // Trang quản trị có thể đổi ngày bắt đầu/kết thúc (site-data.js gọi hàm này), giờ Hà Nội
+  window.setFestivalDates = function (start, finish) {
+    var a = new Date(String(start) + (/[+Z]/.test(start) ? '' : ':00+07:00')).getTime();
+    var b = new Date(String(finish || start) + (/[+Z]/.test(finish || start) ? '' : ':00+07:00')).getTime();
+    if (!isNaN(a)) target = a;
+    if (!isNaN(b)) end = b;
+  };
   function tick() {
     var now = Date.now();
     var diff = target - now;
