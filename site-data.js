@@ -195,6 +195,31 @@
       });
     }
 
+    // Đơn vị tổ chức & đồng hành (logo)
+    var dt = c.doiTac, secDH = $('#dong-hanh'), boxDH = $('#partner-groups');
+    if (dt && secDH && boxDH) {
+      var groups = list(dt.nhom).map(function (g) {
+        return { tieuDe: g.tieuDe, donVi: list(g.donVi).filter(function (d) { return d.ten || d.logo; }) };
+      }).filter(function (g) { return g.donVi.length; });
+      if (groups.length && !dt.an) {
+        setText('#dong-hanh .section-head h2', dt.tieuDe);
+        setText('#dong-hanh .eyebrow', dt.nhan);
+        var leadDH = $('#dong-hanh .section-head .lead');
+        if (leadDH) { leadDH.textContent = dt.moTa || ''; leadDH.hidden = !dt.moTa; }
+        boxDH.innerHTML = groups.map(function (g) {
+          return '<div class="partner-group">' + (g.tieuDe ? '<h3>' + esc(g.tieuDe) + '</h3>' : '') + '<ul class="partner-grid">' +
+            g.donVi.map(function (d) {
+              var logo = safeUrl(d.logo), link = safeUrl(d.lienKet);
+              var inner = '<span class="partner-logo">' + (logo ? '<img src="' + esc(logo) + '" alt="' + esc(d.ten || 'Logo đơn vị') + '" loading="lazy">' : '<span class="partner-name">' + esc(d.ten) + '</span>') + '</span>' +
+                (logo && d.ten ? '<span class="partner-caption">' + esc(d.ten) + '</span>' : '') +
+                (d.moTa ? '<span class="partner-note">' + esc(d.moTa) + '</span>' : '');
+              return '<li>' + (link ? '<a class="partner" href="' + esc(link) + '" target="_blank" rel="noopener">' + inner + '</a>' : '<div class="partner">' + inner + '</div>') + '</li>';
+            }).join('') + '</ul></div>';
+        }).join('');
+        secDH.hidden = false;
+      }
+    }
+
     // Mục tùy chỉnh (thêm mới từ trang quản trị)
     var box = $('#muc-tuy-chinh'), nav = $('#main-nav'), before = nav && nav.querySelector('a[href="#don-vi"]');
     var mucs = list(c.mucTuyChinh).filter(function (m) { return !m.an && (m.tieuDe || m.moTa); });

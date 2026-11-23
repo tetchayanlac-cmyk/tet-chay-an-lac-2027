@@ -44,7 +44,9 @@
     card: function () { return { tieuDe: '', moTa: '' }; },
     group: function () { return { tieuDe: '', muc: [] }; },
     edition: function () { return { nhan: '', ten: '', diaDiem: '', moTa: '', hienTai: false }; },
-    custom: function () { return { tieuDe: 'Mục mới', nhan: '', moTa: '', dong: [], lienKet: '', nutChu: '', menu: '', an: false }; }
+    custom: function () { return { tieuDe: 'Mục mới', nhan: '', moTa: '', dong: [], lienKet: '', nutChu: '', menu: '', an: false }; },
+    partnerGroup: function () { return { tieuDe: 'Nhóm mới', donVi: [TEMPLATES.partner(), TEMPLATES.partner(), TEMPLATES.partner()] }; },
+    partner: function () { return { ten: '', logo: '', lienKet: '', moTa: '' }; }
   };
 
   var S = {
@@ -592,7 +594,8 @@
   }
   function ensureContent() {
     var c = S.content;
-    ['hero', 'gioiThieu', 'toChuc', 'tongQuan', 'banDo', 'soDo', 'hoatDong', 'tieuChi', 'cacKy'].forEach(function (k) { if (!c[k] || typeof c[k] !== 'object') c[k] = {}; });
+    ['hero', 'gioiThieu', 'toChuc', 'tongQuan', 'banDo', 'soDo', 'hoatDong', 'tieuChi', 'cacKy', 'doiTac'].forEach(function (k) { if (!c[k] || typeof c[k] !== 'object') c[k] = {}; });
+    if (!Array.isArray(c.doiTac.nhom)) c.doiTac.nhom = [];
     ['phanKhu', 'sanKhau', 'mucTuyChinh', 'lichTrinh'].forEach(function (k) { if (!Array.isArray(c[k])) c[k] = []; });
   }
 
@@ -646,6 +649,24 @@
     parts.push(['cac-ky', '7. Các kỳ Tết Chay An Lạc', 'Danh sách các kỳ tổ chức',
       '<div class="grid">' + fld('Tiêu đề mục', 'cacKy.tieuDe') + '</div>' +
       listEditor('cacKy.ky', 'edition', [['Nhãn', 'nhan', { ph: 'Kỳ trước / Kỳ này' }], ['Tên kỳ', 'ten'], ['Địa điểm, thời gian', 'diaDiem'], ['Mô tả', 'moTa', { rows: 2 }], ['Đánh dấu là kỳ hiện tại', 'hienTai', { type: 'bool' }]], '+ Thêm kỳ', function (k) { return k.ten || 'Kỳ mới'; })]);
+    var dh = '';
+    (c.doiTac.nhom || []).forEach(function (g, i) {
+      var gp = 'doiTac.nhom.' + i;
+      dh += '<div class="sub partner-sub"><div class="sub-head"><b>' + esc(g.tieuDe || 'Nhóm ' + (i + 1)) + '</b>' + rowBtns('doiTac.nhom', i, c.doiTac.nhom.length) + '</div>' +
+        '<div class="grid">' + fld('Tên nhóm', gp + '.tieuDe', { ph: 'Đơn vị đồng hành chiến lược' }) + '</div><div class="partner-slots">';
+      (g.donVi || []).forEach(function (d, j) {
+        var q = gp + '.donVi.' + j;
+        dh += '<div class="partner-slot"><div class="sub-head"><b>' + esc(d.ten || 'Ô ' + (j + 1)) + '</b>' + rowBtns(gp + '.donVi', j, g.donVi.length) + '</div>' +
+          fld('Logo', q + '.logo', { type: 'image' }) + fld('Tên đơn vị', q + '.ten') +
+          fld('Link website/fanpage (không bắt buộc)', q + '.lienKet', { ph: 'https://…' }) + fld('Ghi chú nhỏ (không bắt buộc)', q + '.moTa', { ph: 'VD: Phụng sự để dẫn đầu' }) + '</div>';
+      });
+      dh += '</div><button type="button" class="btn btn-sm" data-act="add" data-path="' + gp + '.donVi" data-tpl="partner">+ Thêm ô logo</button></div>';
+    });
+    parts.push(['dong-hanh', 'Đơn vị tổ chức & đồng hành (logo)', 'Các ô để tải logo đơn vị tổ chức, đồng hành, nhà tài trợ',
+      '<p class="hint">Mỗi ô: bấm “Tải ảnh mới lên” để đưa logo vào (nên dùng ảnh PNG nền trong suốt), điền tên đơn vị. Ô để trống tên và logo sẽ không hiện trên website. Có logo thì website hiện logo, chưa có logo thì hiện tên.</p>' +
+      '<div class="grid">' + fld('Dòng chữ nhỏ phía trên', 'doiTac.nhan', { ph: 'Bức tường danh dự' }) + fld('Tiêu đề mục', 'doiTac.tieuDe', { ph: 'Đơn vị tổ chức & đồng hành' }) + fld('Tạm ẩn cả mục này', 'doiTac.an', { type: 'bool' }) + '</div>' +
+      fld('Mô tả (không bắt buộc)', 'doiTac.moTa', { rows: 2 }) + dh +
+      '<p><button type="button" class="btn btn-sm" data-act="add" data-path="doiTac.nhom" data-tpl="partnerGroup">+ Thêm nhóm đơn vị</button></p>']);
     parts.push(['tuy-chinh', 'Mục tùy chỉnh', 'Thêm mục mới hiển thị trước phần Đơn vị tham gia',
       '<p class="hint">Mỗi mục là một phần riêng trên trang chủ: tiêu đề, đoạn văn (để trống một dòng giữa các đoạn), danh sách gạch đầu dòng, nút bấm. Điền “Tên trên menu” nếu muốn mục xuất hiện ở thanh menu.</p>' +
       listEditor('mucTuyChinh', 'custom', [['Tiêu đề', 'tieuDe'], ['Dòng chữ nhỏ phía trên', 'nhan'], ['Tên trên menu (không bắt buộc)', 'menu'],
@@ -671,7 +692,7 @@
     var file = el.files[0]; el.value = '';
     var name = slug(path.split('.')[0]) + '-' + Date.now().toString(36) + '.webp';
     toast('Đang tải ảnh lên…');
-    toWebp(file, 2600).then(function (blob) {
+    toWebp(file, /logo/i.test(path) ? 900 : 2600).then(function (blob) {
       return api('upload', { method: 'POST', query: { folder: 'images', name: name }, type: 'image/webp', body: blob });
     }).then(function () {
       setPath(S.content, path, 'data/hinh/' + name);

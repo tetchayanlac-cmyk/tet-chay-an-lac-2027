@@ -186,3 +186,9 @@ textarea { resize: vertical; }
 .img-field .lbl { font-weight: 600; font-size: .85rem; }
 .img-field img { max-width: min(520px, 100%); border-radius: 8px; border: 1px solid var(--line); }
 input[type=color] { width: 64px; height: 38px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+
+/* Ô logo đơn vị đồng hành */
+.partner-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 12px 0; }
+.partner-slot { border: 1px dashed var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; display: grid; gap: 8px; }
+.partner-slot .img-field { margin-top: 0; }
+.partner-slot .img-field img { max-height: 90px; width: auto; background: repeating-conic-gradient(#f2f2ea 0 25%, #fff 0 50%) 0 0 / 14px 14px; }
