@@ -29,10 +29,15 @@ if (isset($_GET['start'])) {
     switch ($p) {
         case 'facebook':
             if (!cfg('fb_app_id') || !cfg('fb_app_secret')) back('Hãy nhập và lưu App ID, App Secret của Meta trước.', false);
-            $url = 'https://www.facebook.com/' . fb_ver() . '/dialog/oauth?' . http_build_query([
-                'client_id' => cfg('fb_app_id'), 'redirect_uri' => $redirect, 'state' => $state, 'response_type' => 'code',
-                'scope' => 'pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,business_management',
-            ]);
+            $q = ['client_id' => cfg('fb_app_id'), 'redirect_uri' => $redirect, 'state' => $state, 'response_type' => 'code'];
+            if (cfg('fb_config_id')) {
+                // Ứng dụng "Facebook Login for Business": quyền khai báo trong Cấu hình (config_id)
+                $q['config_id'] = cfg('fb_config_id');
+                $q['override_default_response_type'] = 'true';
+            } else {
+                $q['scope'] = 'pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,business_management';
+            }
+            $url = 'https://www.facebook.com/' . fb_ver() . '/dialog/oauth?' . http_build_query($q);
             break;
         case 'youtube':
             if (!cfg('google_client_id') || !cfg('google_client_secret')) back('Hãy nhập và lưu Client ID, Client secret của Google trước.', false);

@@ -380,6 +380,7 @@ if ($action === 'settings') {
         'fbVer' => cfg('fb_ver', 'v24.0'),
         'fbAppId' => (string)cfg('fb_app_id', ''),
         'fbAppSecret' => mask(cfg('fb_app_secret')),
+        'fbConfigId' => (string)cfg('fb_config_id', ''),
         'fbPages' => array_map(fn($p) => ['id' => $p['id'], 'name' => $p['name'], 'ig' => $p['ig']['username'] ?? ''], cfg('fb_pages', [])),
         'fbPage' => cfg('fb_page') ? ['id' => cfg('fb_page')['id'], 'name' => cfg('fb_page')['name']] : null,
         'igAccount' => cfg('ig_account'),
@@ -397,7 +398,7 @@ if ($action === 'settings') {
 if ($action === 'settings-save') {
     need_post();
     need_admin();
-    foreach (['fb_app_id' => 'fbAppId', 'google_client_id' => 'googleClientId', 'tiktok_client_key' => 'tiktokClientKey'] as $k => $f) {
+    foreach (['fb_app_id' => 'fbAppId', 'fb_config_id' => 'fbConfigId', 'google_client_id' => 'googleClientId', 'tiktok_client_key' => 'tiktokClientKey'] as $k => $f) {
         if (array_key_exists($f, $in)) cfg_set($k, trim((string)$in[$f]));
     }
     foreach (['fb_app_secret' => 'fbAppSecret', 'google_client_secret' => 'googleClientSecret', 'tiktok_client_secret' => 'tiktokClientSecret'] as $k => $f) {

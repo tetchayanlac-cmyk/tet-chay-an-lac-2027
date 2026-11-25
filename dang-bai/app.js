@@ -489,10 +489,12 @@
 
       // Facebook + Instagram
       var fbId = field('App ID', c.fbAppId), fbSec = field('App Secret', c.fbAppSecret, 'Dán App Secret');
+      var fbCfg = field('Configuration ID (Facebook Login for Business – nếu có)', c.fbConfigId, 'vd: 1117282497800636');
+      var fbData = function () { return { fbAppId: fbId[1].value, fbAppSecret: fbSec[1].value, fbConfigId: fbCfg[1].value }; };
       var fbBox = h('div', { class: 'panel' }, h('h3', { text: 'Facebook Fanpage & Instagram' }),
         status(!!c.fbPage, c.fbPage ? 'Fanpage: ' + c.fbPage.name : 'Chưa kết nối Fanpage'),
         status(!!c.igAccount, c.igAccount ? 'Instagram: @' + c.igAccount.username : 'Chưa có Instagram (cần tài khoản Business/Creator liên kết với Fanpage)'),
-        fbId[0], fbSec[0]);
+        fbId[0], fbSec[0], fbCfg[0]);
       if (c.fbPages && c.fbPages.length > 1) {
         var sel = h('select', null, c.fbPages.map(function (pg) {
           return h('option', { value: pg.id, selected: c.fbPage && c.fbPage.id === pg.id, text: pg.name + (pg.ig ? ' (IG @' + pg.ig + ')' : '') });
@@ -502,8 +504,8 @@
         sel.addEventListener('change', function () { if (sel.value) saveThen({ fbPage: sel.value }); });
       }
       fbBox.appendChild(h('div', { class: 'row' },
-        h('button', { type: 'button', class: 'btn', text: 'Lưu', onclick: function () { saveThen({ fbAppId: fbId[1].value, fbAppSecret: fbSec[1].value }); } }),
-        h('button', { type: 'button', class: 'btn primary', text: c.fbPage ? 'Kết nối lại' : 'Kết nối Facebook', onclick: function () { saveThen({ fbAppId: fbId[1].value, fbAppSecret: fbSec[1].value }, function () { location.href = 'oauth.php?start=facebook'; }); } }),
+        h('button', { type: 'button', class: 'btn', text: 'Lưu', onclick: function () { saveThen(fbData()); } }),
+        h('button', { type: 'button', class: 'btn primary', text: c.fbPage ? 'Kết nối lại' : 'Kết nối Facebook', onclick: function () { saveThen(fbData(), function () { location.href = 'oauth.php?start=facebook'; }); } }),
         c.fbPage ? h('button', { type: 'button', class: 'btn danger', text: 'Ngắt kết nối', onclick: function () { saveThen({ disconnect: 'facebook' }); } }) : null));
       grid.appendChild(fbBox);
 
