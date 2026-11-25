@@ -55,7 +55,9 @@
     if (body instanceof FormData) opt.body = body;
     else if (body) { opt.body = JSON.stringify(body); opt.headers['Content-Type'] = 'application/json'; }
     if (opt.method === 'POST') opt.headers['X-CSRF'] = S.csrf;
-    return fetch('api.php?action=' + action, opt).then(function (r) {
+    return fetch('api.php?action=' + action, opt).catch(function () {
+      throw new Error('Không kết nối được máy chủ. Kiểm tra mạng rồi tải lại trang.');
+    }).then(function (r) {
       return r.json().catch(function () { return { error: 'Máy chủ trả về lỗi (' + r.status + ').' }; }).then(function (d) {
         if (r.status === 401 && action !== 'login') { S.me = null; renderLogin(); }
         if (!r.ok || d.error) throw new Error(d.error || ('Lỗi ' + r.status));
