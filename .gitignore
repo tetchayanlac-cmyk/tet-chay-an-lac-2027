@@ -16,3 +16,6 @@ desktop.ini
 
 # Cấu hình database của Bản đồ Chay (mật khẩu MySQL) – tạo trực tiếp trên hosting
 ban-do-app/config.php
+
+# Module Đăng bài MXH: CSDL, phiên, video tải lên (chỉ nằm trên máy chủ)
+dang-bai/kho/

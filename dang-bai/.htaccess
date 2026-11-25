@@ -1,0 +1,13 @@
+Options -Indexes
+DirectoryIndex index.html
+
+# Các tệp chỉ chạy nội bộ trên máy chủ, không mở qua web
+<FilesMatch "^(lib|platforms|worker|cli)\.php$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+  Header set X-Frame-Options "DENY"
+  Header set Referrer-Policy "same-origin"
+</IfModule>
